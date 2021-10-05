@@ -12,6 +12,7 @@ namespace Snake
 {
     public partial class Form1 : Form
     {
+        bool a, d;
         Timer timer;
         PictureBox player1;
         PictureBox player2;
@@ -37,20 +38,40 @@ namespace Snake
 
         private void Timer_Tick(object sender, EventArgs e)
         {
+            if (a)
+            {
+                direction += 0.1;
+            }
+            else if (d)
+            {
+                direction -= 0.1;
+            }
             var x = Math.Sin(direction) * speed;
             var y = Math.Cos(direction) * speed;
             player1.Location = new Point(player1.Location.X + Convert.ToInt32(Math.Round(x)), player1.Location.Y + Convert.ToInt32(Math.Round(y)));
         }
 
-        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        private void Form1_KeyUp(object sender, KeyEventArgs e)
         {
-            if(e.KeyCode == Keys.A)
+            if (e.KeyCode == Keys.A)
             {
-                direction += 0.1;
+                a = false;
             }
             else if (e.KeyCode == Keys.D)
             {
-                direction -= 0.1;
+                d = false;
+            }
+        }
+
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.A)
+            {
+                a = true;
+            }
+            else if (e.KeyCode == Keys.D)
+            {
+                d = true;
             }
         }
     }
