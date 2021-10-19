@@ -14,10 +14,9 @@ namespace Snake
     {
         bool a, d;
         Timer timer;
+        Snake snake1;
         PictureBox player1;
-        PictureBox player2;
-        int speed;
-        double direction;
+        List<PictureBox> player1tail;        
 
         public Form1()
         {
@@ -25,13 +24,10 @@ namespace Snake
             timer = new Timer();
             timer.Interval = 50;
             timer.Tick += Timer_Tick;
-            speed = 4;
-            direction = Math.PI / 4;
-            player1 = new PictureBox();
-            player1.Width = 50;
-            player1.Height = 50;
-            player1.Location = new Point(0, 0);
-            player1.BackColor = Color.Blue;
+            snake1 = new Snake();
+            snake1.Speed = 5;
+            player1tail = new List<PictureBox>();
+            player1 = snake1.GetHead(Color.Blue, 10);
             this.Controls.Add(player1);
             timer.Start();
         }
@@ -40,15 +36,17 @@ namespace Snake
         {
             if (a)
             {
-                direction += 0.1;
+                snake1.TurnLeft();
             }
             else if (d)
             {
-                direction -= 0.1;
+                snake1.TurnRight();
             }
-            var x = Math.Sin(direction) * speed;
-            var y = Math.Cos(direction) * speed;
-            player1.Location = new Point(player1.Location.X + Convert.ToInt32(Math.Round(x)), player1.Location.Y + Convert.ToInt32(Math.Round(y)));
+
+            player1tail.Add(player1);
+            snake1.Forward();
+            player1 = snake1.GetHead(Color.Blue, 10);
+            this.Controls.Add(player1);
         }
 
         private void Form1_KeyUp(object sender, KeyEventArgs e)
