@@ -20,24 +20,52 @@ namespace Snake
         List<PictureBox> player1tail;
         PictureBox player2;
         List<PictureBox> player2tail;
+        Point startPoint1;
+        Point startPoint2;
 
         public Form1()
         {
             InitializeComponent();
+            CenterMenu();
             timer = new Timer();
             timer.Interval = 50;
             timer.Tick += Timer_Tick;
-            snake1 = new Snake();
+            snake1 = new Snake(startPoint1);
             snake1.Speed = 5;
             player1tail = new List<PictureBox>();
             player1 = snake1.GetHead(Color.Blue, 10);
-            snake2 = new Snake(new Point(this.ClientSize.Width-10,0));
+            snake2 = new Snake(startPoint2);
             snake2.Speed = 5;            
             player2tail = new List<PictureBox>();
             player2 = snake1.GetHead(Color.Red, 10);
             this.Controls.Add(player1);
-            this.Controls.Add(player2);
-            timer.Start();
+            this.Controls.Add(player2);            
+        }
+
+        private void CenterMenu()
+        {
+            panel1.Top = 0;
+            panel1.Left = ClientSize.Width / 2 - panel1.Width / 2;
+            startPoint1 = new Point();
+            startPoint2 = new Point();
+        }
+
+        private void Form1_ClientSizeChanged(object sender, EventArgs e)
+        {
+            CenterMenu();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            timer.Enabled = !timer.Enabled;
+            if (timer.Enabled)
+            {
+                button1.BackgroundImage = Properties.Resources.pause;
+            }
+            else
+            {
+                button1.BackgroundImage = Properties.Resources.play;
+            }
         }
 
         private void Timer_Tick(object sender, EventArgs e)
