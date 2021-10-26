@@ -12,11 +12,14 @@ namespace Snake
 {
     public partial class Form1 : Form
     {
-        bool a, d;
+        bool a, d, left, right;
         Timer timer;
         Snake snake1;
+        Snake snake2;
         PictureBox player1;
-        List<PictureBox> player1tail;        
+        List<PictureBox> player1tail;
+        PictureBox player2;
+        List<PictureBox> player2tail;
 
         public Form1()
         {
@@ -28,7 +31,12 @@ namespace Snake
             snake1.Speed = 5;
             player1tail = new List<PictureBox>();
             player1 = snake1.GetHead(Color.Blue, 10);
+            snake2 = new Snake(new Point(this.ClientSize.Width-10,0));
+            snake2.Speed = 5;            
+            player2tail = new List<PictureBox>();
+            player2 = snake1.GetHead(Color.Red, 10);
             this.Controls.Add(player1);
+            this.Controls.Add(player2);
             timer.Start();
         }
 
@@ -38,15 +46,27 @@ namespace Snake
             {
                 snake1.TurnLeft();
             }
-            else if (d)
+            if (d)
             {
                 snake1.TurnRight();
+            }
+            if (left)
+            {
+                snake2.TurnLeft();
+            }
+            if (right)
+            {
+                snake2.TurnRight();
             }
 
             player1tail.Add(player1);
             snake1.Forward();
             player1 = snake1.GetHead(Color.Blue, 10);
             this.Controls.Add(player1);
+            player2tail.Add(player2);
+            snake2.Forward();
+            player2 = snake2.GetHead(Color.Red, 10);
+            this.Controls.Add(player2);
         }
 
         private void Form1_KeyUp(object sender, KeyEventArgs e)
@@ -59,6 +79,14 @@ namespace Snake
             {
                 d = false;
             }
+            else if (e.KeyCode == Keys.Left)
+            {
+                left = false;
+            }
+            else if (e.KeyCode == Keys.Right)
+            {
+                right = false;
+            }
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
@@ -70,6 +98,14 @@ namespace Snake
             else if (e.KeyCode == Keys.D)
             {
                 d = true;
+            }
+            else if (e.KeyCode == Keys.Left)
+            {
+                left = true;
+            }
+            else if (e.KeyCode == Keys.Right)
+            {
+                right = true;
             }
         }
     }
