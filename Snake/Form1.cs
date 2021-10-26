@@ -22,32 +22,43 @@ namespace Snake
         List<PictureBox> player2tail;
         Point startPoint1;
         Point startPoint2;
+        bool gameStarted;
 
         public Form1()
         {
             InitializeComponent();
-            CenterMenu();
-            timer = new Timer();
+             timer = new Timer();
             timer.Interval = 50;
             timer.Tick += Timer_Tick;
             snake1 = new Snake(startPoint1);
             snake1.Speed = 5;
+            snake1.Direction = -Math.PI / 2;
             player1tail = new List<PictureBox>();
             player1 = snake1.GetHead(Color.Blue, 10);
             snake2 = new Snake(startPoint2);
-            snake2.Speed = 5;            
+            snake2.Speed = 5;
+            snake2.Direction = Math.PI / 2;
             player2tail = new List<PictureBox>();
-            player2 = snake1.GetHead(Color.Red, 10);
+            player2 = snake2.GetHead(Color.Red, 10);
             this.Controls.Add(player1);
-            this.Controls.Add(player2);            
+            this.Controls.Add(player2);
+            CenterMenu();
         }
 
         private void CenterMenu()
         {
+            Point centerForm = new Point(ClientSize.Width / 2, ClientSize.Height / 2);
             panel1.Top = 0;
-            panel1.Left = ClientSize.Width / 2 - panel1.Width / 2;
-            startPoint1 = new Point();
-            startPoint2 = new Point();
+            panel1.Left = centerForm.X - panel1.Width / 2;
+            startPoint1 = new Point(centerForm.X - 15, centerForm.Y-5);
+            startPoint2 = new Point(centerForm.X + 5, centerForm.Y - 5);
+            if (!gameStarted)
+            {
+                player1.Location = startPoint1;
+                snake1.Head = startPoint1;
+                player2.Location = startPoint2;
+                snake2.Head = startPoint2;
+            }
         }
 
         private void Form1_ClientSizeChanged(object sender, EventArgs e)
@@ -60,6 +71,7 @@ namespace Snake
             timer.Enabled = !timer.Enabled;
             if (timer.Enabled)
             {
+                gameStarted = true;
                 button1.BackgroundImage = Properties.Resources.pause;
             }
             else
